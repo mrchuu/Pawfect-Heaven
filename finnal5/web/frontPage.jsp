@@ -1,119 +1,158 @@
-<%-- 
-    Document   : userList
-    Created on : Mar 1, 2023, 9:15:42 PM
-    Author     : FPT
+<%--
+Document : userList
+Author : FPT
 --%>
 
-<%@page import="java.util.*" %>
-<%@page import="model.*" %>
+<%@page import="java.util." %>
+<%@page import="model." %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
-    animalInfoDao aid = new animalInfoDao();
-    List<animalInfo> list = (List<animalInfo>)request.getAttribute("list");
-    int count = aid.getCount();
-    int pageCount = count / 12;
-    if(count % 12 != 0){
-        pageCount++;
-    }
-    int offset = (int)request.getAttribute("offSet");
+// Import animalInfoDao and create an instance
+animalInfoDao aid = new animalInfoDao();
+   // Get the animalInfo list from the request
+List<animalInfo> list = (List<animalInfo>) request.getAttribute("list");
+
+// Get the total number of records
+int count = aid.getCount();
+
+// Calculate the total number of pages
+int pageCount = count / 12;
+if (count % 12 != 0) {
+    pageCount++;
+}
+
+// Get the offset value from the request
+int offset = (int) request.getAttribute("offSet");
+
 %>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <link rel="stylesheet" href="css/styling2.css?version=15"/>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
-        <style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JSP Page</title>
+<!-- Add stylesheet and font dependencies -->
+<link rel="stylesheet" href="css/styling2.css?version=15"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
 
-            body{
+<!-- Add custom styles for the page -->
+<style>
+    body{
+        background: linear-gradient(to right, #F5E3E6, #D9E4F5);
+    }
+    
+    /* Carousel styling */
+    .carousel {
+        width: 100%;
+        height: 400px;
+        margin: auto;
+        position: relative;
+        overflow: hidden;
+    }
 
-                background: linear-gradient(to right, #F5E3E6, #D9E4F5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    .carousel img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
 
-            }
-            /* Style the container holding the carousel */
-            .carousel {
-                width: 100%;
-                height: 400px;
-                margin: auto;
-                position: relative;
-                overflow: hidden;
-            }
+    .carousel img:first-child {
+        opacity: 1;
+    }
 
-            /* Style the images inside the carousel */
-            .carousel img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                position: absolute;
-                top: 0;
-                left: 0;
-                opacity: 0;
-                transition: opacity 1s ease-in-out;
-            }
+    .prev,
+    .next {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 30px;
+        font-weight: bold;
+        color: white;
+        cursor: pointer;
+        z-index: 2;
+    }
 
-            /* Show the first image when the page loads */
-            .carousel img:first-child {
-                opacity: 1;
-            }
+    .prev {
+        left: 10px;
+    }
 
-            /* Position the previous and next buttons */
-            .prev,
-            .next {
-                position: absolute;
-                top: 50%;
-                transform: translateY(-50%);
-                font-size: 30px;
-                font-weight: bold;
-                color: white;
-                cursor: pointer;
-                z-index: 2;
-            }
+    .next {
+        right: 10px;
+    }
 
-            /* Position the previous button on the left */
-            .prev {
-                left: 10px;
-            }
+    /* Header bar styling */
+    .bar {
+        width: 100%;
+        height: 50px;
+        background: linear-gradient(to right, #F5E3E6, #D9E4F5);
+        display: flex;
+        justify-content: left;
+        align-items: center;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        margin-bottom: 20px
+    }
 
-            /* Position the next button on the right */
-            .next {
-                right: 10px;
-            }
+    /* Footer styling */
+    .footer {
+        background-color: rgb(27,31,35);
+        color: #fff;
+        padding: 0px;
+        position: relative;
+        top: 47px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-            .bar {
-                width: 100%;
-                height: 50px;
-                background: linear-gradient(to right, #F5E3E6, #D9E4F5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-                display: flex;
-                justify-content: left;
-                align-items: center;
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                text-transform: uppercase;
-                margin-bottom: 20px
-            }
+    .footer .logo {
+        width: 100%;
+        font-size
 
-        </style>
-        <style>
-            /* Style the container holding the footer */
-            .footer {
-                background-color: rgb(27,31,35);
-                color: #fff;
-                padding: 0px;
-                position: relative;
-                top: 47px;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-            }
-
-            /* Style the logo in the footer */
-            .footer .logo {
-                width: 100%;
 
                 font-size: 36px;
+                font-weight: bold;
+                color: #fff;
+
+            }
+
+            /* Style the links in the footer */
+            .footer ul {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+            }
+
+            .footer li {
+                margin-right: 20px;
+            }
+
+            .footer a {
+                color: #ccc;
+                text-decoration: none;
+                font-size: 16px;
+            }
+            .filterForm{
+                background-color: white;
+                padding: 5px;
+                border: 1px groove #00ffe5;
+                box-shadow: 3px 3px 3px 3px #ccbcc6
+            }
+
+            .des{
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                width: 100%;
+font-size: 36px;
                 font-weight: bold;
                 color: #fff;
 
