@@ -81,19 +81,6 @@
                 right: 10px;
             }
 
-            .bar {
-                width: 100%;
-                height: 50px;
-                background: linear-gradient(to right, #F5E3E6, #D9E4F5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-                display: flex;
-                justify-content: left;
-                align-items: center;
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                text-transform: uppercase;
-                margin-bottom: 20px
-            }
 
         </style>
         <style>
